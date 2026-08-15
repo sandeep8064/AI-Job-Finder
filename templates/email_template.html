@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#0f0f23;font-family:'Segoe UI',Arial,sans-serif;">
+    <div style="max-width:640px;margin:0 auto;padding:24px;">
+        <!-- Header -->
+        <div style="background:linear-gradient(135deg,#1a1a3e 0%,#2d1b69 50%,#1a1a3e 100%);border-radius:16px;padding:32px;text-align:center;margin-bottom:24px;">
+            <h1 style="color:#ffffff;font-size:28px;margin:0 0 8px 0;">🔍 Ai Job finder</h1>
+            <p style="color:#a78bfa;font-size:16px;margin:0;">{{ total_found }} relevant jobs found</p>
+            <p style="color:#6b7280;font-size:13px;margin:8px 0 0 0;">{{ date }}</p>
+        </div>
+
+        <!-- Job Cards -->
+        {% for sj in jobs %}
+        <div style="background:linear-gradient(135deg,#1e1e3f 0%,#252547 100%);border:1px solid #2d2d5e;border-radius:12px;padding:20px;margin-bottom:16px;">
+            <!-- Title Row -->
+            <div style="margin-bottom:12px;">
+                <a href="{{ sj.job.url }}" style="color:#e2e8f0;font-size:18px;font-weight:600;text-decoration:none;">
+                    {{ sj.job.title }}
+                </a>
+            </div>
+
+            <!-- Company & Location -->
+            <div style="margin-bottom:12px;">
+                <span style="color:#a78bfa;font-size:14px;font-weight:500;">{{ sj.job.company }}</span>
+                {% if sj.job.location %}
+                <span style="color:#6b7280;font-size:14px;"> · {{ sj.job.location }}</span>
+                {% endif %}
+            </div>
+
+            <!-- Match Score Badge -->
+            <div style="display:inline-block;margin-bottom:12px;">
+                {% if sj.score_pct >= 70 %}
+                <span style="background:#059669;color:#ffffff;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">
+                    🎯 {{ sj.score_pct }}% Match
+                </span>
+                {% elif sj.score_pct >= 40 %}
+                <span style="background:#d97706;color:#ffffff;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">
+                    ⚡ {{ sj.score_pct }}% Match
+                </span>
+                {% else %}
+                <span style="background:#4b5563;color:#ffffff;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">
+                    📋 {{ sj.score_pct }}% Match
+                </span>
+                {% endif %}
+
+                <span style="color:#6b7280;font-size:12px;margin-left:8px;">via {{ sj.job.source }}</span>
+            </div>
+
+            <!-- Match Reasons -->
+            {% if sj.match_reasons %}
+            <div style="margin-bottom:12px;">
+                {% for reason in sj.match_reasons %}
+                <span style="background:#1a1a3e;color:#818cf8;padding:3px 10px;border-radius:6px;font-size:12px;display:inline-block;margin:2px 4px 2px 0;">
+                    {{ reason }}
+                </span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Description snippet -->
+            {% if sj.job.description %}
+            <p style="color:#9ca3af;font-size:13px;line-height:1.5;margin:0 0 12px 0;">
+                {{ sj.job.description[:200] }}{% if sj.job.description|length > 200 %}...{% endif %}
+            </p>
+            {% endif %}
+
+            <!-- Apply Button -->
+            <a href="{{ sj.job.url }}" style="display:inline-block;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#ffffff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">
+                Apply Now →
+            </a>
+        </div>
+        {% endfor %}
+
+        <!-- Footer -->
+        <div style="text-align:center;padding:20px;border-top:1px solid #2d2d5e;margin-top:8px;">
+            <p style="color:#6b7280;font-size:12px;margin:0;">
+                Sent by Ai Job finder · <a href="#" style="color:#818cf8;">Manage Settings</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

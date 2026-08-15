@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: job-agent
+    runtime: python
+    rootDir: job_agent
+    buildCommand: pip install -r requirements.txt && playwright install chromium
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.6"
+    plan: free

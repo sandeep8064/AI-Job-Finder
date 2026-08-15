@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai Job finder — Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #111128;
+            --bg-card: #16163a;
+            --border: #2a2a5a;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #6366f1;
+            --accent-green: #10b981;
+            --gradient-primary: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --gradient-card: linear-gradient(135deg, #16163a 0%, #1c1c48 100%);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        nav {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links { display: flex; gap: 8px; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .flash {
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .flash.success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; }
+        .flash.error { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+
+        .setting-group {
+            background: var(--gradient-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .setting-group h2 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--accent-purple);
+        }
+
+        .form-row {
+            margin-bottom: 18px;
+        }
+        .form-row:last-child { margin-bottom: 0; }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+        textarea { resize: vertical; min-height: 80px; }
+
+        .hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .form-row-inline {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Toggle switch */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .toggle-row label {
+            margin-bottom: 0;
+        }
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--border);
+            border-radius: 26px;
+            transition: 0.3s;
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .toggle input:checked + .toggle-slider {
+            background: var(--accent-purple);
+        }
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(22px);
+            background: #fff;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            cursor: pointer;
+            appearance: auto;
+        }
+        select:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: #fff;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        @media (max-width: 768px) {
+            .form-row-inline { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">🔍 Ai Job finder</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/settings" class="active">Settings</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <h1>⚙️ Settings</h1>
+
+        <form action="/settings" method="post">
+            <!-- Email Settings -->
+            <div class="setting-group">
+                <h2>📧 Email Configuration</h2>
+                <div class="form-row-inline">
+                    <div class="form-row">
+                        <label>SMTP Server</label>
+                        <input type="text" name="smtp_server" value="{{ config.email.smtp_server }}">
+                    </div>
+                    <div class="form-row">
+                        <label>SMTP Port</label>
+                        <input type="number" name="smtp_port" value="{{ config.email.smtp_port }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>Sender Email</label>
+                    <input type="email" name="sender_email" value="{{ config.email.sender_email }}"
+                           placeholder="your-email@gmail.com">
+                </div>
+                <div class="form-row">
+                    <label>Sender Password (App Password)</label>
+                    <input type="password" name="sender_password" value="{{ config.email.sender_password }}"
+                           placeholder="Gmail App Password">
+                    <div class="hint">Use a Gmail App Password (not your regular password). Generate one at myaccount.google.com → Security → App passwords</div>
+                </div>
+                <div class="form-row">
+                    <label>Recipient Email</label>
+                    <input type="email" name="recipient_email" value="{{ config.email.recipient_email }}"
+                           placeholder="notify-me@email.com">
+                </div>
+            </div>
+
+            <!-- Search Settings -->
+            <div class="setting-group">
+                <h2>🔍 Search Configuration</h2>
+                <div class="form-row">
+                    <label>Search Keywords (comma separated)</label>
+                    <input type="text" name="keywords" value="{{ config.search.keywords | join(', ') }}"
+                           placeholder="python developer, software engineer, data scientist">
+                </div>
+                <div class="form-row">
+                    <label>Locations (comma separated)</label>
+                    <input type="text" name="locations" value="{{ config.search.locations | join(', ') }}"
+                           placeholder="Bangalore, Remote, Mumbai">
+                </div>
+                <div class="form-row">
+                    <label>Company Career Page URLs (one per line)</label>
+                    <textarea name="career_page_urls"
+                              placeholder="https://careers.google.com/jobs/&#10;https://www.microsoft.com/en-us/careers&#10;https://jobs.netflix.com/">{{ config.search.career_page_urls | join('\n') }}</textarea>
+                    <div class="hint">Add company career pages to scrape directly for openings</div>
+                </div>
+                <div class="form-row-inline">
+                    <div class="form-row">
+                        <label>Max Pages per Search</label>
+                        <input type="number" name="max_pages" value="{{ config.search.max_pages }}" min="1" max="10">
+                    </div>
+                    <div class="form-row">
+                        <label>Match Threshold (0.0 - 1.0)</label>
+                        <input type="text" name="match_threshold" value="{{ config.match_threshold }}">
+                        <div class="hint">Lower = more results, Higher = more relevant only</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Settings -->
+            <div class="setting-group">
+                <h2>🤖 Agent Configuration</h2>
+                <div class="form-row">
+                    <label>Scrape Interval (hours)</label>
+                    <input type="number" name="scrape_interval_hours" value="{{ config.scrape_interval_hours }}" min="1" max="48">
+                    <div class="hint">How often the agent should automatically scrape for new jobs</div>
+                </div>
+            </div>
+
+            <!-- Naukri Account Integration -->
+            <div class="setting-group">
+                <h2>🏢 Naukri Account Integration</h2>
+                <div class="form-row">
+                    <label>Naukri Email/Username</label>
+                    <input type="text" name="naukri_user" value="{{ config.naukri.naukri_user }}" placeholder="your-naukri-email@example.com">
+                </div>
+                <div class="form-row">
+                    <label>Naukri Password</label>
+                    <input type="password" name="naukri_password" value="{{ config.naukri.naukri_password }}" placeholder="Your Naukri Password">
+                    <div class="hint">Providing login credentials helps bypass guest blocks and allows more comprehensive searches.</div>
+                </div>
+            </div>
+
+            <!-- TinyFish Integration -->
+            <div class="setting-group">
+                <h2>🐟 TinyFish AI Integration</h2>
+                <div class="toggle-row">
+                    <label class="toggle">
+                        <input type="checkbox" name="tinyfish_enabled" value="1"
+                               {% if config.tinyfish.enabled %}checked{% endif %}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <label>Enable TinyFish AI Scraping</label>
+                </div>
+                <div class="form-row">
+                    <label>TinyFish API Key</label>
+                    <input type="password" name="tinyfish_api_key" value="{{ config.tinyfish.api_key }}"
+                           placeholder="sk-tinyfish-...">
+                    <div class="hint">Get your API key at <a href="https://agent.tinyfish.ai" target="_blank" style="color: var(--accent-purple);">agent.tinyfish.ai</a></div>
+                </div>
+                <div class="form-row">
+                    <label>Target URLs (one per line)</label>
+                    <textarea name="tinyfish_target_urls" rows="6"
+                              placeholder="https://in.indeed.com&#10;https://www.glassdoor.co.in&#10;https://www.instahyre.com&#10;https://www.foundit.in&#10;https://www.hirist.tech">{{ config.tinyfish.target_urls | join('\n') }}</textarea>
+                    <div class="hint">Sites that block traditional scrapers — TinyFish AI agent will navigate and extract jobs from these</div>
+                </div>
+                <div class="form-row">
+                    <label>Browser Profile</label>
+                    <select name="tinyfish_browser_profile">
+                        <option value="stealth" {% if config.tinyfish.browser_profile == 'stealth' %}selected{% endif %}>Stealth (recommended for bot-protected sites)</option>
+                        <option value="lite" {% if config.tinyfish.browser_profile == 'lite' %}selected{% endif %}>Lite (faster, for unprotected sites)</option>
+                    </select>
+                    <div class="hint">Use Stealth for sites with bot detection (Indeed, Glassdoor). Use Lite for simpler career pages.</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">💾 Save Settings</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+name: Job Agent Scheduler
+
+on:
+  schedule:
+    - cron: '17 */6 * * *' # Every 6 hours
+  workflow_dispatch: # Allows manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright Browsers
+        run: playwright install chromium --with-deps
+
+      - name: Run Job Agent
+        env:
+          EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+          NAUKRI_USER: ${{ secrets.NAUKRI_USER }}
+          NAUKRI_PASSWORD: ${{ secrets.NAUKRI_PASSWORD }}
+          TINYFISH_API_KEY: ${{ secrets.TINYFISH_API_KEY }}
+          CV_PATH: "uploads/Resume.pdf"
+        run: python -u main.py run-once
+
+      - name: Commit and Push Database changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          if [ -f jobs.db ]; then
+            git add -f jobs.db
+            git commit -m "chore: update jobs database [skip ci]" || echo "No changes to commit"
+            git pull --rebase origin main || true
+            git push origin main || echo "Push failed, continuing..."
+          else
+            echo "No jobs.db found, skipping commit."
+          fi

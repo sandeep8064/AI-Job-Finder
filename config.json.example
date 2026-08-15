@@ -1,0 +1,43 @@
+{
+  "email": {
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587,
+    "sender_email": "",
+    "sender_password": "",
+    "recipient_email": ""
+  },
+  "search": {
+    "keywords": [
+      "java developer",
+      "software engineer"
+    ],
+    "locations": [
+      "India"
+    ],
+    "min_experience": 0,
+    "max_experience": 10,
+    "max_pages": 3,
+    "target_companies": [
+      "TCS",
+      "Infosys",
+      "Wipro",
+      "HCL",
+      "Cognizant",
+      "Tech Mahindra",
+      "Capgemini"
+    ],
+    "career_page_urls": [
+      "https://ibegin.tcs.com/iBegin/jobs/search",
+      "https://career.infosys.com/joblist",
+      "https://careers.wipro.com/careers-home/jobs"
+    ]
+  },
+  "naukri": {
+    "naukri_user": "",
+    "naukri_password": ""
+  },
+  "scrape_interval_hours": 6,
+  "match_threshold": 0.15,
+  "rate_limit_seconds": 2.0,
+  "cv_path": ""
+}

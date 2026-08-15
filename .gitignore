@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Databases
+*.db
+*.sqlite3
+
+# Project Configuration & Secrets
+config.json
+.env
+
+# Logs and Scratch
+*.log
+scratch/
+test_*.html
+*.png
+*.html
+!templates/*.html
+!web/templates/*.html
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
