@@ -10,8 +10,15 @@ from typing import List, Optional
 
 from utils.time_utils import get_ist_time
 
-import pdfplumber
-from docx import Document
+try:
+    import pdfplumber
+except ImportError:
+    pdfplumber = None
+
+try:
+    from docx import Document
+except ImportError:
+    Document = None
 
 
 @dataclass
@@ -111,6 +118,9 @@ LINK_PATTERN = r"(?:(?:https?|ftp):\/\/)?(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}
 
 def _extract_text_from_pdf(file_path: str) -> str:
     """Extract all text from a PDF file."""
+    if pdfplumber is None:
+        print("pdfplumber is not installed. Run 'pip install pdfplumber'")
+        return ""
     text_parts = []
     try:
         with pdfplumber.open(file_path) as pdf:
@@ -125,6 +135,9 @@ def _extract_text_from_pdf(file_path: str) -> str:
 
 def _extract_text_from_docx(file_path: str) -> str:
     """Extract all text from a DOCX file."""
+    if Document is None:
+        print("python-docx is not installed. Run 'pip install python-docx'")
+        return ""
     try:
         doc = Document(file_path)
         return "\n".join(para.text for para in doc.paragraphs if para.text.strip())
